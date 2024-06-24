@@ -1,9 +1,3 @@
-# # path = 'phon.txt'
-# # data = open(path, 'r', encoding='utf-8')
-# # for line in data:
-# #     print(line)
-# # data.close()
-
 def work_with_phonebook():
     choice=show_menu()
     phone_book=read_txt('phon.txt')
@@ -14,12 +8,16 @@ def work_with_phonebook():
             last_name=input('lastname ')
             print(find_by_lastname(phone_book,last_name))
         elif choice==3:
-            last_name=input('lastname ')
-            new_number=input('new  number ')
-            print(change_number(phone_book,last_name,new_number))
+            number=input('print number ')
+            print(find_by_number(phone_book,number))
         elif choice==4:
-            lastname=input('lastname ')
-            print(delete_by_lastname(phone_book,lastname))
+            last_name=input('Last name ')
+            new_name=input('Name ')
+            new_number=input('New number ')
+            description = input('Description ')
+            phone_book= new_contact(phone_book,last_name,new_number,new_name,description)
+            print_result(phone_book)
+            write_txt('phon.txt',phone_book)
         elif choice==5:
             number=input('number ')
             print(find_by_number(phone_book,number))
@@ -55,14 +53,31 @@ def write_txt(filename , phone_book):
     with open(filename,'w',encoding='utf-8') as phout:
         for i in range(len(phone_book)):
             s=''
-            for v in phone_book[i].alues():
+            for v in phone_book[i].values():
                 s = s + v + ','
-            phout.write(f'{s[:-1]}\n')
-
-def print_result(file_name):
-    for i in range(len(file_name)):
+            phout.write(s[:-1])
+#1
+def print_result(phone_book):
+    for i in range(len(phone_book)):
         s=''
-        for j in file_name[i].values():
+        for j in phone_book[i].values():
             s = s+j + ','
         print(f'{s[:-1]}')
+#2
+def find_by_lastname(phone_book,last_name):
+    for i in range(len(phone_book)):
+        if phone_book[i]["Фамилия"] ==last_name:
+            return " ".join(phone_book[i].values())
+#3       
+def find_by_number(phone_book,number):
+    for i in range(len(phone_book)):
+        if phone_book[i]['Телефон'][1:] == number:
+            return " ".join(phone_book[i].values())
+#4
+def new_contact(phone_book,last_name,new_number,new_name='',description=''):
+    fields=['Фамилия', 'Имя', 'Телефон', 'Описание']
+    Temp = "\n"+last_name+", "+new_name+", "+new_number+", "+description
+    phone_book.append(dict(zip(fields,Temp.split(","))))
+    return phone_book
+
 work_with_phonebook()
