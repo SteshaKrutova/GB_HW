@@ -9,19 +9,6 @@ def read_txt(filename):
             phone_book.append(record)	
     return phone_book
 
-def new_contact(phone_book,last_name,new_number,new_name='',description=''):
-    fields=['Фамилия', 'Имя', 'Телефон', 'Описание']
-    Temp = "\n"+last_name+", "+new_name+", "+new_number+", "+description
-    phone_book.append(dict(zip(fields,Temp.split(","))))
-    return phone_book
-
-def print_result(phone_book):
-    for i in range(len(phone_book)):
-        s=''
-        for j in phone_book[i].values():
-            s = s+j + ','
-        print(f'{s[:-1]}')
-
 def write_txt(filename , phone_book):
     with open(filename,'w',encoding='utf-8') as phout:
         for i in range(len(phone_book)):
@@ -30,13 +17,30 @@ def write_txt(filename , phone_book):
                 s = s + v + ','
             phout.write(s[:-1])
 
-phone_book=read_txt('phon.txt')
-last_name=input('Last name ')
-new_name=input('Name ')
-new_number=input('New number ')
-description = input('Description ')
-phone_book= new_contact(phone_book,last_name,new_number,new_name,description)
-print_result(phone_book)
-write_txt('phon.txt',phone_book)
+def print_result(phone_book):
+    for i in range(len(phone_book)):
+        s=''
+        for j in phone_book[i].values():
+            s = s+j + ','
+        print(s[:-1])
 
-#print_result(new_contact(phone_book,last_name,new_number,new_name,description))
+def delete_by_lastname(phone_book,lastname):
+    for i in range(len(phone_book)):
+        if phone_book[i-1]["Фамилия"]==lastname:
+            phone_book.pop(i-1)
+            write_txt('phon.txt', phone_book)
+            print_result(phone_book)
+            return phone_book
+    print("Данной фамилии не существует")
+
+
+user_data=input('new data ')
+add_user(phone_book,user_data)
+write_txt('phonebook.txt',phone_book)
+
+phone_book=read_txt('phon.txt')
+
+print_result(phone_book)
+print('-----')
+lastname='Петров'
+delete_by_lastname(phone_book,lastname)

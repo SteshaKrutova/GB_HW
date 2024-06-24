@@ -17,14 +17,15 @@ def work_with_phonebook():
             description = input('Description ')
             phone_book= new_contact(phone_book,last_name,new_number,new_name,description)
             print_result(phone_book)
-            write_txt('phon.txt',phone_book)
         elif choice==5:
-            number=input('number ')
-            print(find_by_number(phone_book,number))
+            last_name=input('Lastname: ')
+            new_number=input('New  number: ')
+            print_result(change_number(phone_book,last_name,new_number))
         elif choice==6:
-            user_data=input('new data ')
-            add_user(phone_book,user_data)
-            write_txt('phonebook.txt',phone_book)
+            lastname=input('lastname ')
+            delete_by_lastname(phone_book,lastname)
+        elif choice==7:
+            break
         choice=show_menu()
 
 def show_menu():
@@ -33,8 +34,9 @@ def show_menu():
           "2. Найти абонента по фамилии\n"
           "3. Найти абонента по номеру телефона\n"
           "4. Добавить абонента в справочник\n"
-          "5. Сохранить справочник в текстовом формате\n"
-          "6. Закончить работу")
+          "5. Изменить номер\n"
+          "6. Удалить контакт по фамилии\n"
+          "7. Закончить работу")
     choice = int(input())
     return choice
 
@@ -56,6 +58,7 @@ def write_txt(filename , phone_book):
             for v in phone_book[i].values():
                 s = s + v + ','
             phout.write(s[:-1])
+
 #1
 def print_result(phone_book):
     for i in range(len(phone_book)):
@@ -63,21 +66,44 @@ def print_result(phone_book):
         for j in phone_book[i].values():
             s = s+j + ','
         print(f'{s[:-1]}')
+
 #2
 def find_by_lastname(phone_book,last_name):
     for i in range(len(phone_book)):
         if phone_book[i]["Фамилия"] ==last_name:
             return " ".join(phone_book[i].values())
+        
 #3       
 def find_by_number(phone_book,number):
     for i in range(len(phone_book)):
         if phone_book[i]['Телефон'][1:] == number:
             return " ".join(phone_book[i].values())
+        
 #4
 def new_contact(phone_book,last_name,new_number,new_name='',description=''):
     fields=['Фамилия', 'Имя', 'Телефон', 'Описание']
     Temp = "\n"+last_name+", "+new_name+", "+new_number+", "+description
     phone_book.append(dict(zip(fields,Temp.split(","))))
+    write_txt('phon.txt',phone_book)
     return phone_book
+
+#5 Изменение номера контакта
+def change_number (phone_book,last_name,new_number):
+    new_number= " "+ new_number
+    for i in range(len(phone_book)):
+        if phone_book[i]['Фамилия']==last_name:
+            phone_book[i]['Телефон']=new_number
+    write_txt('phon.txt',phone_book)
+    return phone_book
+
+#6 Удаление контакта по фамилии
+def delete_by_lastname(phone_book,lastname):
+    for i in range(len(phone_book)):
+        if phone_book[i-1]["Фамилия"]==lastname:
+            phone_book.pop(i-1)
+            write_txt('phon.txt', phone_book)
+            print_result(phone_book)
+            return phone_book
+    print("Данной фамилии не существует")
 
 work_with_phonebook()
