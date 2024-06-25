@@ -22,25 +22,25 @@ def print_result(phone_book):
         s=''
         for j in phone_book[i].values():
             s = s+j + ','
-        print(s[:-1])
+        print((i+1),"- ", s[:-1])
 
-def delete_by_lastname(phone_book,lastname):
-    for i in range(len(phone_book)):
-        if phone_book[i-1]["Фамилия"]==lastname:
-            phone_book.pop(i-1)
-            write_txt('phon.txt', phone_book)
-            print_result(phone_book)
-            return phone_book
-    print("Данной фамилии не существует")
-
-
-user_data=input('new data ')
-add_user(phone_book,user_data)
-write_txt('phonebook.txt',phone_book)
+def transfer(phone_book,line_number,new_file="new_file"):
+    line_number = int(line_number) -1
+    Turn=list(phone_book[line_number].values())
+    with open(new_file,'w',encoding='utf=8')  as phot:
+        s=''
+        for i in range(len(Turn)):
+            s+=Turn[i]+" "
+        phot.write(s)
+    
 
 phone_book=read_txt('phon.txt')
 
 print_result(phone_book)
 print('-----')
-lastname='Петров'
-delete_by_lastname(phone_book,lastname)
+# line_number=input('line_number:')
+# new_file=input('New file')
+# if new_file =='':
+#     transfer(phone_book, line_number)
+# else:
+#     transfer(phone_book, line_number,new_file)
