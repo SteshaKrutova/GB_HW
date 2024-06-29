@@ -13,4 +13,3 @@ for i in range(df.shape[0]):
     df2.at[i,'robot']='False'
     df2.at[i,'human']='True'
 df2.head()
-print(df2)
